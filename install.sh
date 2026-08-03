@@ -8,7 +8,7 @@ target=""
 force="false"
 
 usage() {
-  printf '%s\n' "Usage: ./install.sh [--skill all|ask-first|demo-first] [--harness auto|agents|codex|claude|copilot|all] [--project PATH] [--target PATH] [--force]"
+  printf '%s\n' "Usage: ./install.sh [--skill all|SKILL_NAME] [--harness auto|agents|codex|claude|copilot|all] [--project PATH] [--target PATH] [--force]"
 }
 
 while [ "$#" -gt 0 ]; do
@@ -23,7 +23,6 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-case "$skill" in all|ask-first|demo-first) ;; *) printf '%s\n' "Invalid skill: $skill" >&2; exit 2 ;; esac
 case "$harness" in auto|agents|codex|claude|copilot|all) ;; *) printf '%s\n' "Invalid harness: $harness" >&2; exit 2 ;; esac
 
 case "$0" in
@@ -33,10 +32,24 @@ esac
 repo_dir=$(CDPATH= cd -- "$script_dir" && pwd -P)
 project_abs=$(CDPATH= cd -- "$project" && pwd -P)
 
-if [ "$skill" = "all" ]; then
-  skill_names="ask-first demo-first"
-else
-  skill_names=$skill
+skill_names=""
+for directory in "$repo_dir"/skills/*; do
+  if [ -f "$directory/SKILL.md" ]; then
+    name=${directory##*/}
+    skill_names="${skill_names}${skill_names:+ }${name}"
+  fi
+done
+
+if [ -z "$skill_names" ]; then
+  printf '%s\n' "No packaged skills found in $repo_dir/skills" >&2
+  exit 1
+fi
+
+if [ "$skill" != "all" ]; then
+  case " $skill_names " in
+    *" $skill "*) skill_names=$skill ;;
+    *) printf '%s\n' "Invalid skill: $skill" >&2; exit 2 ;;
+  esac
 fi
 
 if [ -n "$target" ]; then

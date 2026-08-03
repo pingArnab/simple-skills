@@ -1,6 +1,5 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("all", "ask-first", "demo-first")]
     [string]$Skill = "all",
 
     [ValidateSet("auto", "agents", "codex", "claude", "copilot", "all")]
@@ -14,7 +13,18 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-SkillNames {
-    if ($Skill -eq "all") { return @("ask-first", "demo-first") }
+    $availableSkills = @(
+        Get-ChildItem -LiteralPath $sourceRoot -Directory |
+            Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "SKILL.md") } |
+            ForEach-Object Name
+    )
+
+    if ($availableSkills.Count -eq 0) {
+        throw "No packaged skills found in $sourceRoot"
+    }
+
+    if ($Skill -eq "all") { return $availableSkills }
+    if ($Skill -notin $availableSkills) { throw "Invalid skill: $Skill" }
     return @($Skill)
 }
 

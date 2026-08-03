@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 
-import { cpSync, existsSync, mkdirSync, rmSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const validSkills = new Set(["all", "ask-first", "demo-first"]);
 const validHarnesses = new Set(["auto", "agents", "codex", "claude", "copilot", "all"]);
 
 function usage() {
-  console.log("Usage: node install.mjs [--skill all|ask-first|demo-first] [--harness auto|agents|codex|claude|copilot|all] [--project PATH] [--target PATH] [--force]");
+  console.log("Usage: node install.mjs [--skill all|SKILL_NAME] [--harness auto|agents|codex|claude|copilot|all] [--project PATH] [--target PATH] [--force]");
 }
 
 function parseArgs(argv) {
@@ -59,14 +58,20 @@ function getInstallRoots(options, projectPath) {
 
 try {
   const options = parseArgs(process.argv.slice(2));
-  if (!validSkills.has(options.skill)) throw new Error(`Invalid skill: ${options.skill}`);
   if (!validHarnesses.has(options.harness)) throw new Error(`Invalid harness: ${options.harness}`);
 
   const projectPath = path.resolve(options.project);
   if (!existsSync(projectPath)) throw new Error(`Project directory does not exist: ${projectPath}`);
 
   const repositoryPath = path.dirname(fileURLToPath(import.meta.url));
-  const skillNames = options.skill === "all" ? ["ask-first", "demo-first"] : [options.skill];
+  const availableSkills = readdirSync(path.join(repositoryPath, "skills"), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && existsSync(path.join(repositoryPath, "skills", entry.name, "SKILL.md")))
+    .map((entry) => entry.name);
+  if (!availableSkills.length) throw new Error(`No packaged skills found in ${path.join(repositoryPath, "skills")}`);
+  if (options.skill !== "all" && !availableSkills.includes(options.skill)) {
+    throw new Error(`Invalid skill: ${options.skill}`);
+  }
+  const skillNames = options.skill === "all" ? availableSkills : [options.skill];
   const installRoots = getInstallRoots(options, projectPath);
 
   for (const name of skillNames) {

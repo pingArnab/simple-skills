@@ -1,17 +1,39 @@
-# Portable Agent Skills
+# Simple Skill
 
-Two independent, open-format Agent Skills for safer AI-assisted work:
+[![skills.sh](https://skills.sh/b/pingArnab/simple-skills)](https://skills.sh/pingArnab/simple-skills)
 
-- **`ask-first`** resolves material ambiguity with evidence-backed recommendations before action.
+Small, focused skills for AI coding agents. Simple Skill favors clear, easy-to-adopt workflows over large, production-oriented instruction sets. Each skill does one useful thing well and can be used independently.
+
+## Available skills
+
+- **`ask-first`** resolves material ambiguity with evidence-backed recommendations before acting.
 - **`demo-first`** previews user-facing changes and requires explicit approval before production implementation.
 
-Both skills follow the [`SKILL.md` Agent Skills format](https://agentskills.io/specification). They can activate automatically from their descriptions or be invoked explicitly using the syntax supported by your harness, such as `$ask-first` in Codex or `/ask-first` in Claude Code.
+Both skills follow the [Agent Skills `SKILL.md` format](https://agentskills.io/specification). They can activate automatically from their descriptions or be invoked explicitly using the syntax supported by your harness, such as `$ask-first` in Codex or `/ask-first` in Claude Code.
 
 ## Install
 
-Each installer accepts:
+### skills.sh
 
-- a skill: `all`, `ask-first`, or `demo-first`;
+Install every Simple Skill with the official skills.sh CLI:
+
+```sh
+npx skills add pingArnab/simple-skills --skill '*'
+```
+
+Install a single skill instead:
+
+```sh
+npx skills add pingArnab/simple-skills --skill ask-first
+```
+
+Use `--agent` to target a specific coding agent, such as `--agent codex` or `--agent claude-code`. See the [skills CLI documentation](https://www.skills.sh/docs/cli) for all options.
+
+### Repository installers
+
+Each bundled installer accepts:
+
+- a skill: `all` or any skill currently in `skills/`;
 - a harness: `auto`, `agents`, `codex`, `claude`, `copilot`, or `all`;
 - a project directory;
 - an optional custom target directory;
@@ -25,7 +47,7 @@ Each installer accepts:
 | [Claude Code](https://code.claude.com/docs/en/skills) | `.claude/skills` |
 | [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills) | `.github/skills` |
 
-### PowerShell
+#### PowerShell
 
 ```powershell
 .\install.ps1 -Skill all -Harness auto -Project C:\path\to\project
@@ -37,13 +59,13 @@ If Windows blocks local scripts under the current execution policy, run:
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -Skill all -Harness auto -Project C:\path\to\project
 ```
 
-### POSIX shell
+#### POSIX shell
 
 ```sh
 sh ./install.sh --skill all --harness auto --project /path/to/project
 ```
 
-### Node.js
+#### Node.js
 
 ```sh
 node install.mjs --skill all --harness auto --project /path/to/project
@@ -67,6 +89,7 @@ skills/
   demo-first/
     SKILL.md
     agents/openai.yaml
+skills.sh.json
 install.ps1
 install.sh
 install.mjs

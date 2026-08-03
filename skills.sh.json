@@ -1,0 +1,14 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Simple Skill",
+      "description": "Small, focused workflows for AI coding agents.",
+      "skills": [
+        "ask-first",
+        "demo-first"
+      ]
+    }
+  ]
+}
