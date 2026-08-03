@@ -1,0 +1,4 @@
+interface:
+  display_name: "Demo First"
+  short_description: "Preview user-facing changes before implementation"
+  default_prompt: "Use $demo-first to preview and approve this user-facing change before implementation."

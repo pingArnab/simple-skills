@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ask First"
+  short_description: "Resolve ambiguity before taking material action"
+  default_prompt: "Use $ask-first to clarify this request before acting."
