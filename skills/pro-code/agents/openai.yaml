@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pro Code"
+  short_description: "Write professional, production-quality code"
+  default_prompt: "Use $pro-code to write this with proper complexity, standards, and documentation."
