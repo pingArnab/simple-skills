@@ -8,8 +8,9 @@ Small, focused skills for AI coding agents. Simple Skill favors clear, easy-to-a
 
 - **`ask-first`** resolves material ambiguity with evidence-backed recommendations before acting.
 - **`demo-first`** previews user-facing changes and requires explicit approval before production implementation.
+- **`pro-code`** writes production-quality code with complexity analysis, language-specific standards, and documentation, plus optional logging and tests.
 
-Both skills follow the [Agent Skills `SKILL.md` format](https://agentskills.io/specification). They can activate automatically from their descriptions or be invoked explicitly using the syntax supported by your harness, such as `$ask-first` in Codex or `/ask-first` in Claude Code.
+These skills follow the [Agent Skills `SKILL.md` format](https://agentskills.io/specification). They can activate automatically from their descriptions or be invoked explicitly using the syntax supported by your harness, such as `$ask-first` in Codex or `/ask-first` in Claude Code.
 
 ## Install
 
@@ -87,6 +88,9 @@ skills/
     SKILL.md
     agents/openai.yaml
   demo-first/
+    SKILL.md
+    agents/openai.yaml
+  pro-code/
     SKILL.md
     agents/openai.yaml
 skills.sh.json
